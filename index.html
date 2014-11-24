@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>FlyOut ALPHA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            overflow: hidden;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+    <script type="text/javascript" src="scripts/pixi.js"></script>
+</head>
+<body>
+    <script>
+        /// initialize pixi
+        var stage = new PIXI.Stage(0x66FF99);
+
+        var renderer = PIXI.autoDetectRenderer(window.outerWidth, window.outerHeight);
+        document.body.appendChild(renderer.view);
+        requestAnimFrame(animate);
+
+
+        // init player
+        var texture = PIXI.Texture.fromImage("img/2dairplane.png");
+
+        var player = new PIXI.Sprite(texture);
+
+        var textureBullet = PIXI.Texture.fromImage("img/bullet.png");
+
+        var enemy = PIXI.Texture.fromImage("img/enemy.png");
+
+        player.anchor.x = 0.5;
+        player.anchor.y = 0.5;
+
+        player.position.x = window.outerWidth / 2;
+        player.position.y = window.outerHeight - 150;
+
+        stage.addChild(player);
+        var playersBullets = [];
+        var fireInTheHole = function () {
+
+            var bullet = new PIXI.Sprite(textureBullet);
+            bullet.anchor.x = 0.5;
+            bullet.anchor.y = 0.5;
+
+            bullet.position.x = player.position.x - 45;
+            bullet.position.y = player.position.y - 45;
+
+            stage.addChild(bullet);
+            playersBullets.push(bullet);
+
+            var bullet1 = new PIXI.Sprite(textureBullet);
+            bullet1.anchor.x = 0.5;
+            bullet1.anchor.y = 0.5;
+
+            bullet1.position.x = player.position.x + 45;
+            bullet1.position.y = player.position.y - 45;
+
+
+            stage.addChild(bullet1);
+            playersBullets.push(bullet1);
+        };
+
+        var moveBullets = function () {
+            for (var i = 0; i < playersBullets.length; i++)
+                playersBullets[i].position.y -= 1.5;
+        };
+
+        var lastBulletCreated = Date.toString();
+        var playerControll = function () {
+            window.addEventListener("keydown", function (event) {
+                switch (event.keyCode) {
+                    //case 38: // up
+                    //case 40: //down
+                    case 39: //Right;
+                        if (player.position.x >= window.outerWidth - 25)
+                            break;
+                        player.position.x += 0.1;
+                        break;
+                    case 37: //left
+                        if (player.position.x <= 25)
+                            break;
+                        player.position.x -= 0.1;
+                        break;
+                }
+
+            },
+            false);
+        };
+
+        var cleanUp = function () {
+            for (var i = 0; i < playersBullets.length; i++)
+                if (playersBullets[i].position.y < player.position.y - window.outerHeight) {
+                    stage.removeChild(playersBullets[i]);
+                    playersBullets.splice(i, 1);
+                    console.log("All clear");
+                };
+
+            for (var i = 0; i < enemies.length; i++)
+                if (enemies[i].position.y > player.position.y + 100) {
+                    stage.removeChild(enemies[i]);
+                    enemies.splice(i, 1);
+                };
+        };
+
+        var pauseGame = function () {
+            document.bgColor = '#000000';
+            var esc = false;
+        };
+
+        //========================== Enemies ==================================//
+        var enemies = [];
+
+        var generateEnemies = function () {
+            for (var i = 0; i < 5; i++) {
+                var newEnemy = new PIXI.Sprite(enemy);
+                newEnemy.anchor.x = 0.5;
+                newEnemy.anchor.y = 0.5;
+
+                newEnemy.position.x = (Math.random() * window.outerWidth) + 1;
+                newEnemy.position.y = (Math.random() * window.outerHeight) - window.outerHeight;
+
+                enemies.push(newEnemy);
+                stage.addChild(newEnemy);
+            }
+        }
+
+        var moveEnemies = function () {
+            for (var i = 0; i < enemies.length; i++) {
+                enemies[i].position.y += 1;
+            }
+        }
+        // END Enemies ========================================================//
+
+        //======================= Timers ===========================//
+        var lastEnemy = Date.now();
+        // END Timers ==============================================//
+
+
+
+        //======================= Collisions =======================//
+
+        //======================= Constants =======================//
+        const enemyRadius = 50;
+
+        const bulletRadius = 13;
+
+        const playerRadius = 50;
+
+        var playerLives = 3;
+        // END Constants ==========================================//
+
+        var collisionBulletEnemy = function () {
+            for (var i = 0; i < playersBullets.length; i++) {
+                for (var j = 0; j < enemies.length; j++) {
+                    var sumRadius = 8;
+                    var dx = (enemies[j].position.x + enemyRadius) - (playersBullets[i].position.x + bulletRadius);
+                    var dy = (enemies[j].position.y + enemyRadius) - (playersBullets[i].position.y + bulletRadius);
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance <= sumRadius) {
+                        stage.removeChild(playersBullets[i]);
+                        stage.removeChild(enemies[j]);
+                    };
+                };
+            };
+        };
+
+        var collisionPlayerEnemy = function () {
+            for(var i=0;i<enemies.length;i++){
+                var rad=enemyRadius+playerRadius;
+                var dx = (enemies[i].position.x + enemyRadius) - (player.position.x + playerRadius);
+                var dy = (enemies[i].position.y + enemyRadius) - (player.position.y + playerRadius);
+                var distance = Math.sqrt(dx * dx + dy * dy);
+                if(distance <= rad)
+                {
+                    stage.removeChild(enemies[i]);
+                    if(playerLives === 0)
+                    {
+                        console.log("GAME OVeR!");
+                    }
+                }
+            }
+        };
+        // END Collisions ==========================================//
+
+
+        function animate() {
+
+            console.log(lastBulletCreated);
+            if (lastEnemy < Date.now() - 10000) {
+                generateEnemies();
+                lastEnemy = Date.now();
+            };
+            moveBullets();
+            moveEnemies();
+
+            collisionBulletEnemy();
+            playerControll();
+            cleanUp();
+
+            //player.rotation += 0.05;
+
+            renderer.render(stage);
+            requestAnimFrame(animate);
+            window.addEventListener("keypress", function (event) {
+                if (event.keyCode === 32) //spacebar
+                    fireInTheHole();
+            });
+        };
+    </script>
+</body>
+</html>
