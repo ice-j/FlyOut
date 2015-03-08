@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var mute = function(){
                     var bgsound = document.getElementById('bg-sound');
                     var shootsound = document.getElementById('shoot-sound');
@@ -21,6 +22,9 @@ document.onload = function() {
   
 
 
+=======
+document.onload = function() {
+>>>>>>> origin/gh-pages
   var Game = function() {
     var theCanvas = document.getElementById('screen');
     theCanvas.width = window.innerWidth;
@@ -34,12 +38,16 @@ document.onload = function() {
     this.shootSound = document.getElementById('shoot-sound');
     this.explosionSound = document.getElementById('explosion-sound');
 
+<<<<<<< HEAD
     var joystick = new VirtualJoystick({
       // container: document.getElementById('container'),
       limitStickTravel: true,
     stickRadius : 50,
       mouseSupport  : true
     });
+=======
+    var joystick = new VirtualJoystick();
+>>>>>>> origin/gh-pages
     this.joystick = joystick;
 
 
@@ -120,6 +128,10 @@ document.onload = function() {
     },
 
     incrementScore: function(){
+<<<<<<< HEAD
+=======
+      console.log(this.score);
+>>>>>>> origin/gh-pages
       this.score=  parseInt(this.score)+1;
       document.getElementById("score").innerHTML = this.score;
     },
@@ -131,11 +143,17 @@ document.onload = function() {
 
     over: function(){
       this.bodies = [];
+<<<<<<< HEAD
       this.decrementLives();
       console.log(this.bodies);
       this.screen.font="20px Times Roman";
       this.screen.fillText("Game Over :(", 400, 400);
         return 1;
+=======
+      console.log(this.bodies);
+      this.screen.font="20px Times Roman";
+      this.screen.fillText("Game Over :(", 400, 400);
+>>>>>>> origin/gh-pages
     },
 
     updateHeight: function(height)
@@ -168,7 +186,11 @@ document.onload = function() {
           !this.game.invadersBelow(this)) {
         var bullet = new Bullet(this.game,
                                 { x: this.center.x, y: this.center.y + this.size.y / 2 },
+<<<<<<< HEAD
                                 { x: Math.random() - 0.5, y: 2 }, "invader");
+=======
+                                { x: Math.random() - 0.5, y: 2 });
+>>>>>>> origin/gh-pages
         this.game.addBody(bullet);
       }
 
@@ -185,11 +207,16 @@ document.onload = function() {
     },
 
     collision: function() {
+<<<<<<< HEAD
       var bgsound = document.getElementById('bg-sound');
       if(!bgsound.paused){
         this.game.explosionSound.load();
         this.game.explosionSound.play();
       }
+=======
+      this.game.explosionSound.load();
+        this.game.explosionSound.play();
+>>>>>>> origin/gh-pages
       this.game.removeBody(this);
     }
   };
@@ -207,19 +234,26 @@ document.onload = function() {
 
   var Player = function(game) {
     this.game = game;
+<<<<<<< HEAD
     this.movementSpeed = 5;
+=======
+>>>>>>> origin/gh-pages
     this.size = { x: 76, y: 102 };
     this.center = { x: this.game.size.x / 2, y: this.game.size.y - 120};
     this.keyboarder = new Keyboarder();
 
     this.lastFired = Date.now();
     this.playerImgCount = 0;
+<<<<<<< HEAD
     this.playerGasImgCount = 0;
+=======
+>>>>>>> origin/gh-pages
     this.circle = {x: this.game.size.x/2, y: this.game.size.y/2, angle: 0};
   };
 
   Player.prototype = {
     update: function() {
+<<<<<<< HEAD
 
         var theCanvas= document.getElementById('screen');
       if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) || this.game.joystick.left() ) {
@@ -234,6 +268,15 @@ document.onload = function() {
       }else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN )) {
         //if(this.center.y-this.movementSpeed < theCanvas.width)
         this.center.y += this.movementSpeed;
+=======
+      if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) || this.game.joystick.left() ) {
+        if(this.center.x-2 > 0)
+            this.center.x -= 2;
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT || this.game.joystick.right())) {
+        var theCanvas= document.getElementById('screen');
+        if(this.center.x+2 < theCanvas.width)
+        this.center.x += 2;
+>>>>>>> origin/gh-pages
       }
       else if(this.keyboarder.isDown(this.keyboarder.KEYS.X)){
         console.log("x')");
@@ -244,6 +287,7 @@ document.onload = function() {
         
         var bullet = new Bullet(this.game,
                                 { x: this.center.x, y: this.center.y - this.size.y - 10 },
+<<<<<<< HEAD
                                 { x: 0, y: -7 }, "player");
         this.game.addBody(bullet);
         var bgsound = document.getElementById('bg-sound');
@@ -252,6 +296,13 @@ document.onload = function() {
         this.game.shootSound.play();
       }
       }
+=======
+                                { x: 0, y: -7 });
+        this.game.addBody(bullet);
+        this.game.shootSound.load();
+        this.game.shootSound.play();
+      }
+>>>>>>> origin/gh-pages
     },
 
     draw: function(screen) {
@@ -260,12 +311,15 @@ document.onload = function() {
         this.playerImgCount = 0;
       else
         this.playerImgCount++;
+<<<<<<< HEAD
 this.size = { x: 76, y: 102 };
       drawImage(screen, {size: {x: 64, y: 128}, center: {x: this.center.x, y: this.center.y+90 } }, "player\\gas\\"+this.playerGasImgCount+".png");
       if(this.playerGasImgCount == 15)
         this.playerGasImgCount = 0;
       else
         this.playerGasImgCount++;
+=======
+>>>>>>> origin/gh-pages
     },
 
     collision: function() {
@@ -280,15 +334,23 @@ this.size = { x: 76, y: 102 };
     }
   };
 
+<<<<<<< HEAD
   var Bullet = function(game, center, velocity, shooter) {
     this.shooter= shooter;
+=======
+  var Bullet = function(game, center, velocity) {
+>>>>>>> origin/gh-pages
     this.game = game;
     this.center = center;
     this.size = { x: 3, y: 3 };
     this.velocity = velocity;
 
+<<<<<<< HEAD
     this.enemyBullet = "enemy\\bullet.png";
     this.playerBullet = "player\\bullet.png";
+=======
+    this.bulletImage = "player\\bullet.png";
+>>>>>>> origin/gh-pages
   };
 
   Bullet.prototype = {
@@ -307,10 +369,15 @@ this.size = { x: 76, y: 102 };
     },
 
     draw: function(screen) {
+<<<<<<< HEAD
       if(this.shooter == "invader")
       drawImage(screen, this, this.enemyBullet);
     else
       drawImage(screen,this, this.playerBullet);
+=======
+
+      drawImage(screen, this, this.bulletImage);
+>>>>>>> origin/gh-pages
     },
 
     collision: function() {
@@ -333,7 +400,11 @@ this.size = { x: 76, y: 102 };
       return keyState[keyCode] === true;
     };
 
+<<<<<<< HEAD
     this.KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32, X:45, UP: 38, DOWN: 40 };
+=======
+    this.KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32, X:45 };
+>>>>>>> origin/gh-pages
   };
 
   var drawRect = function(screen, body) {
@@ -344,9 +415,15 @@ this.size = { x: 76, y: 102 };
   };
 
   var drawImage = function(screen, body, image) {
+<<<<<<< HEAD
     var htmlImage = new Image();
     htmlImage.src = image;
     screen.drawImage(htmlImage,
+=======
+    var playerNowImage = new Image();
+    playerNowImage.src = image;
+    screen.drawImage(playerNowImage,
+>>>>>>> origin/gh-pages
                     body.center.x - body.size.x/2,
                     body.center.y);
   };

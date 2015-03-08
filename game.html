@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Space Invaders</title>
+    <script src="joystick.js"></script>
+    <script src="space-invaders.js"></script>
+    <style type="text/css">
+    	body{
+    		width: 100%;
+    		height: 90%;
+    		margin: auto;
+    		background-color: black;
+    	}
+
+    	#screen{
+
+    		width: 100%;
+    		height: 85%;
+    		display: inline-block;
+    	}
+
+    	h2{
+    		display: inline-block;
+    		position: absolute;
+    		color: #fff;
+    	}
+
+    	.right{
+    		float: right;
+    		right: 10px;
+    	}
+
+    	.left{
+    		float: left;
+    		left: 10px;
+    	}
+
+        .top-40{
+
+            margin-top: 40px;
+        }
+        #container {
+            width       : 100%;
+            height      : 100%;
+            overflow    : hidden;
+            padding     : 0;
+            margin      : 0;
+            -webkit-user-select : none;
+            -moz-user-select    : none;
+            z-index: 1000;
+        }
+    	body, html { margin: 0px;}
+
+
+    </style>
+  </head>
+  <body>
+    <audio id="bg-sound" src="bgsound.mp3"  loop></audio>
+    <audio id="shoot-sound" src="shoot.mp3"></audio>
+    <audio id="explosion-sound" src="Explosion4.ogg"></audio>
+    <div id="container"></div>
+    <h2>Score: <span id="score">0</span></h2>
+    <h2 class="right top-40"><img id="muteIcon" onclick="mute();" src="mute.png" width=50 height=50 style="cursor: pointer;" /></h2>
+    <h2 class="right"> Lives left: <span id="lives">3</span></h2>
+    <canvas id="screen" width="800px" height="800px"></canvas>
+  </body>
+</html>
